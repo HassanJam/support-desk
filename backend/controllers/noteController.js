@@ -20,7 +20,7 @@ const getNotes = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Ticket not found");
   }
-  if (ticket.user_id !== req.user.id) {
+  if (ticket.user_id !== req.user.id && !req.user.is_admin) {
     res.status(401);
     throw new Error("User not authorized");
   }
@@ -50,7 +50,7 @@ const addNote = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Ticket not found");
   }
-  if (ticket.user_id !== req.user.id) {
+  if (ticket.user_id !== req.user.id && !req.user.is_admin) {
     res.status(401);
     throw new Error("User not authorized");
   }

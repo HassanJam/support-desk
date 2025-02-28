@@ -12,8 +12,9 @@ function NewTicket() {
     (state) => state.tickets
   );
 
-  const [name] = useState(user.name);
-  const [email] = useState(user.email);
+  const { name, email } = user;
+  // const [name] = useState(user.name);
+  // const [email] = useState(user.email);
   const [product, setProduct] = useState("iPhone");
   const [description, setDescription] = useState("");
 

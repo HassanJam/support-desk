@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db').sequelize;
 const bcrypt = require('bcryptjs');
+// const Ticket = require('./ticketModel');
 
 const User = sequelize.define('User', {
   id: {
@@ -47,5 +48,7 @@ const User = sequelize.define('User', {
   updatedAt: 'updated_at',
   tableName: 'users', // Matches the SQL table name
 });
+
+// User.hasMany(Ticket, { foreignKey: "user_id", as: "tickets" });
 
 module.exports = User;

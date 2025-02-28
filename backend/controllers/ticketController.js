@@ -10,7 +10,33 @@ const getTickets = asyncHandler(async (req, res) => {
     res.status(401);
     throw new Error("User not found");
   }
-  const tickets = await Ticket.findAll({ where: { user_id: req.user.id } });
+
+  let tickets;
+  if (user.is_admin) {
+    // If user is an admin, return all tickets with user details
+    tickets = await Ticket.findAll({
+      include: [
+        {
+          model: User,
+          attributes: ['name', 'email'], // Select only name and email
+          as: 'user', // Optional alias, if you've set one in your association
+        },
+      ],
+    });
+  } else {
+    // Otherwise, return only their own tickets with user details
+    tickets = await Ticket.findAll({
+      where: { user_id: req.user.id },
+      include: [
+        {
+          model: User,
+          attributes: ['name', 'email'],
+          as: 'user', // Optional alias
+        },
+      ],
+    });
+  }
+
   res.status(200).json(tickets);
 });
 
@@ -34,7 +60,16 @@ const getTicket = asyncHandler(async (req, res) => {
     ")"
   );
 
-  const ticket = await Ticket.findByPk(ticketId);
+  const ticket = await Ticket.findByPk(req.params.id, {
+    include: [
+      {
+        model: User,
+        attributes: ['id', 'name', 'email'], // Select only necessary fields
+        as: 'user', // Match the alias defined in associations
+      },
+    ],
+  });
+
   console.log("getTicket - Ticket found:", ticket ? ticket.toJSON() : "null");
   console.log(
     "getTicket - ticket.id:",
@@ -52,7 +87,7 @@ const getTicket = asyncHandler(async (req, res) => {
   console.log("here");
 
   // Get the authenticated user's ID
-  const requestingUserId = Number(req.params.id);
+  const requestingUserId = Number(req.user.id);
   console.log("here");
 
   console.log(
@@ -71,7 +106,7 @@ const getTicket = asyncHandler(async (req, res) => {
   );
 
   // Check if the ticket belongs to the requesting user
-  if (ticket.id !== requestingUserId) {
+  if (Number(ticket.user_id) !== Number(requestingUserId) && !req.user.is_admin) {
     console.log("getTicket - User not authorized");
     res.status(401);
     throw new Error("User not authorized");
@@ -131,7 +166,7 @@ const deleteTicket = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Ticket not found");
   }
-  if (ticket.userId !== req.user.id) {
+  if (ticket.user_id !== req.user.id && !req.user.is_admin) {
     res.status(401);
     throw new Error("Not authorized");
   }
@@ -155,7 +190,7 @@ const updateTicket = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Ticket not found");
   }
-  if (ticket.user_id !== req.user.id) {
+  if (ticket.user_id !== req.user.id && !req.user.is_admin) {
     res.status(401);
     throw new Error("Not authorized");
   }

@@ -88,7 +88,7 @@ h3 {
 
 .boxes {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   justify-content: space-between;
   align-items: center;
@@ -211,7 +211,7 @@ h3 {
 .ticket,
 .ticket-headings {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 20px;
   justify-content: space-between;
   align-items: center;
@@ -273,6 +273,10 @@ h3 {
 .ticket-page .btn-block {
   width: 100%;
   margin-top: 30px;
+}
+
+.ticket-page .ticket-header h3 {
+  margin-top: 20px;
 }
 
 .ticket-desc {

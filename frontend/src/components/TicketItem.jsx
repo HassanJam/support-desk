@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function TicketItem({ ticket }) {
+function TicketItem({ ticket, is_admin }) {
   const options = {
     weekday: 'long',
     year: 'numeric',
@@ -10,6 +10,9 @@ function TicketItem({ ticket }) {
   };
   return (
     <div className='ticket'>
+      {!is_admin && (
+          <div>{ticket.user.name}</div>
+        )}
       <div>{new Date(ticket.created_at).toLocaleString('en-US', options)}</div>
       <div>{ticket.product}</div>
       <div className={`status status-${ticket.status}`}>{ticket.status}</div>

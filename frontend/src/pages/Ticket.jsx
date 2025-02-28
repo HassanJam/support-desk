@@ -4,7 +4,6 @@ import { getTicket, closeTicket } from "../features/tickets/ticketSlice";
 import {
   getNotes,
   createNote,
-  reset as notesReset,
 } from "../features/notes/noteSlice";
 import Spinner from "../components/Spinner";
 import { useParams, useNavigate } from "react-router-dom";
@@ -30,6 +29,7 @@ const customStyles = {
 Modal.setAppElement("#root");
 
 function Ticket() {
+  const user = useSelector((state) => state.auth.user);
   const options = {
     weekday: "long",
     year: "numeric",
@@ -49,7 +49,7 @@ function Ticket() {
 
   console.log(window.location.href);
   const { ticket_id } = useParams();
-  console.log("ticket_id from fronend", ticket_id);
+  console.log("ticket_id from frontend", ticket_id);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -62,8 +62,9 @@ function Ticket() {
     dispatch(getNotes(ticket_id));
     // eslint-disable-next-line
   }, [isError, message, ticket_id]);
-  console.log("succefullt got Ticket", ticket);
-  console.log("succefullt got Notes", notes);
+  console.log("successfully got Ticket", ticket);
+
+  console.log("successfully got Notes", notes);
 
   if (isLoading || notesIsLoading) return <Spinner />;
 
@@ -103,6 +104,17 @@ function Ticket() {
             {ticket.status}
           </span>
         </h2>
+        {
+          user.is_admin && (
+            <>
+              <h2>
+                Created By: {ticket.user.name}
+              </h2>
+              <h2>
+                Email: {ticket.user.email}
+              </h2>    
+            </>)
+        }        
         <h3>
           Date Submitted:{" "}
           {new Date(ticket.created_at).toLocaleString("en-US", options)}

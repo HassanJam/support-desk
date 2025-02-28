@@ -51,6 +51,7 @@ const registerUser = asyncHandler(async (req, res) => {
         _id: user.id,
         name: user.name,
         email: user.email,
+        is_admin: user.is_admin,
         token: generateToken(user.id),
       });
     } else {
@@ -79,6 +80,7 @@ const loginUser = asyncHandler(async (req, res) => {
       _id: user.id,
       name: user.name,
       email: user.email,
+      is_admin: user.is_admin,
       token: generateToken(user.id),
     });
   } else {
@@ -92,6 +94,7 @@ const getMe = asyncHandler(async (req, res) => {
     id: req.user.id, // Adjusted to match Sequelize
     email: req.user.email,
     name: req.user.name,
+    is_admin: req.user.is_admin,
   };
   res.status(200).json(user);
 });
