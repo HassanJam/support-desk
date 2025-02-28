@@ -1,103 +1,108 @@
-const asyncHandler = require('express-async-handler') // Simple middleware for handling exceptions inside of async express routes and passing them to your express error handlers.
-const jwt = require('jsonwebtoken') // JSON Web Token for authentication and authorization
-const bcrypt = require('bcryptjs') // A library to help you hash passwords.
+const asyncHandler = require("express-async-handler");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
-const User = require('../models/userModel')
+const User = require("../models/userModel");
 
-// @desc    Register a new user
-// @route   /api/users
-// @access  Public
-
-/**
- * 'asyncHandler' is a simple middleware for handling exceptions
- * inside of async express routes and passing them to your express
- * error handlers.
- */
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body // destructure the request body params
+  const { name, email, password } = req.body;
+  console.log("registerUser - Request body:", req.body);
 
-  // Validation
   if (!name || !email || !password) {
-    res.status(400)
-    throw new Error('Please provide all required fields')
+    console.log("registerUser - Missing fields");
+    res.status(400);
+    throw new Error("Please provide all required fields");
   }
 
-  // Check for existing user
-  const userExists = await User.findOne({ email })
+  console.log("registerUser - Checking for existing user with email:", email);
+  let userExists;
+  try {
+    userExists = await User.findOne({ where: { email } });
+    console.log(
+      "registerUser - User exists check result:",
+      userExists ? userExists.toJSON() : "No existing user"
+    );
+  } catch (error) {
+    console.error(
+      "registerUser - Error in findOne:",
+      error.message,
+      error.stack
+    );
+    res.status(500);
+    throw new Error("Database error while checking user existence");
+  }
 
   if (userExists) {
-    res.status(400)
-    throw new Error('User already exists')
+    console.log("registerUser - User already exists:", userExists.toJSON());
+    res.status(400);
+    throw new Error("User already exists");
   }
 
-  // Hash password
-  const salt = await bcrypt.genSalt(10) // 10 is the number of rounds
-  const hashedPassword = await bcrypt.hash(password, salt) // hash the password
-
-  // Create user
-  const user = await User.create({
-    name,
-    email,
-    password: hashedPassword
-  })
-
-  // User is created
-  if (user) {
-    res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      token: generateToken(user._id)
-    })
-  } else {
-    res.status(400)
-    throw new Error('User could not be created')
+  console.log("registerUser - Attempting to create user");
+  try {
+    const user = await User.create({ name, email, password });
+    console.log(
+      "registerUser - User creation result:",
+      user ? user.toJSON() : "null"
+    );
+    if (user) {
+      console.log("registerUser - User created successfully:", user.toJSON());
+      res.status(201).json({
+        _id: user.id,
+        name: user.name,
+        email: user.email,
+        token: generateToken(user.id),
+      });
+    } else {
+      console.log("registerUser - User creation returned null");
+      res.status(400);
+      throw new Error("User could not be created");
+    }
+  } catch (error) {
+    console.error(
+      "registerUser - Error creating user:",
+      error.message,
+      error.stack
+    );
+    res.status(400);
+    throw new Error(`User creation failed: ${error.message}`);
   }
-})
+});
 
-// @desc    Login a user
-// @route   /api/users/login
-// @access  Public
 const loginUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body // destructuring
+  const { email, password } = req.body;
 
-  const user = await User.findOne({ email })
+  const user = await User.findOne({ where: { email } });
 
-  // Check User and Password match
   if (user && (await bcrypt.compare(password, user.password))) {
     res.status(200).json({
-      _id: user._id,
+      _id: user.id,
       name: user.name,
       email: user.email,
-      token: generateToken(user._id)
-    })
+      token: generateToken(user.id),
+    });
   } else {
-    res.status(401) // Unauthorized
-    throw new Error('Invalid credentials')
+    res.status(401);
+    throw new Error("Invalid credentials");
   }
-})
+});
 
-// @desc    Get current user
-// @route   /api/users/me
-// @access  Private
 const getMe = asyncHandler(async (req, res) => {
   const user = {
-    id: req.user._id,
+    id: req.user.id, // Adjusted to match Sequelize
     email: req.user.email,
-    name: req.user.name
-  }
-  res.status(200).json(user)
-})
+    name: req.user.name,
+  };
+  res.status(200).json(user);
+});
 
-// Generate token
-generateToken = id => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '30d'
-  })
-}
+// Assuming generateToken is defined elsewhere in the file
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
+};
 
 module.exports = {
   registerUser,
   loginUser,
-  getMe
-}
+  getMe,
+};

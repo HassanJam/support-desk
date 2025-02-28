@@ -1,32 +1,41 @@
-const mongoose = require('mongoose')
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/db').sequelize;
 
-const noteSchema = mongoose.Schema(
-  {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: 'User'
-    },
-    ticket: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: 'Ticket'
-    },
-    text: {
-      type: String,
-      required: [true, 'Please add some text']
-    },
-    isStaff: {
-      type: Boolean,
-      default: false
-    },
-    staffId: {
-      type: String
-    }
+const Note = sequelize.define('Note', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
   },
-  {
-    timestamps: true
-  }
-)
+  user_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: { model: 'users', key: 'id' },
+  },
+  ticket_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: { model: 'tickets', key: 'id' },
+  },
+  text: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+    validate: { notEmpty: { msg: 'Please add some text' } },
+  },
+  is_staff: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
+  staff_id: {
+    type: DataTypes.STRING,
+    allowNull: true, // Not required in the original schema
+  },
+}, {
+  timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
+  tableName: 'notes',
+});
 
-module.exports = mongoose.model('Note', noteSchema)
+module.exports = Note;

@@ -29,6 +29,7 @@ function Tickets() {
 
   return (
     <>
+      {console.log(tickets)}
       <BackButton url="/" />
       <h1>Tickets</h1>
       <div className="tickets">

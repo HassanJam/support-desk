@@ -47,7 +47,9 @@ function Ticket() {
     (state) => state.notes
   );
 
-  const { ticketId } = useParams();
+  console.log(window.location.href);
+  const { ticket_id } = useParams();
+  console.log("ticket_id from fronend", ticket_id);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -55,11 +57,13 @@ function Ticket() {
     if (isError) {
       toast.error(message);
     }
-
-    dispatch(getTicket(ticketId));
-    dispatch(getNotes(ticketId));
+    console.log("dispatching ticket with id ", ticket_id);
+    dispatch(getTicket(ticket_id));
+    dispatch(getNotes(ticket_id));
     // eslint-disable-next-line
-  }, [isError, message, ticketId]);
+  }, [isError, message, ticket_id]);
+  console.log("succefullt got Ticket", ticket);
+  console.log("succefullt got Notes", notes);
 
   if (isLoading || notesIsLoading) return <Spinner />;
 
@@ -69,7 +73,7 @@ function Ticket() {
 
   // Close ticket
   const onTicketClose = () => {
-    dispatch(closeTicket(ticketId));
+    dispatch(closeTicket(ticket_id));
     toast.success("Ticket Closed");
     navigate("/tickets");
   };
@@ -85,7 +89,7 @@ function Ticket() {
   // Create Note Submit
   const onNoteSubmit = (e) => {
     e.preventDefault();
-    dispatch(createNote({ ticketId, noteText }));
+    dispatch(createNote({ ticketId: ticket_id, noteText }));
     closeModal();
   };
 
@@ -94,14 +98,14 @@ function Ticket() {
       <header className="ticket-header">
         <BackButton url="/tickets" />
         <h2>
-          Ticket ID: {ticket._id}
+          Ticket ID: {ticket.id}
           <span className={`status status-${ticket.status}`}>
             {ticket.status}
           </span>
         </h2>
         <h3>
           Date Submitted:{" "}
-          {new Date(ticket.createdAt).toLocaleString("en-US", options)}
+          {new Date(ticket.created_at).toLocaleString("en-US", options)}
         </h3>
         <h3>Product: {ticket.product}</h3>
         <hr />
