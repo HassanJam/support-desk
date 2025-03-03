@@ -27,6 +27,13 @@ const getNotes = asyncHandler(async (req, res) => {
   console.log("getting notes");
   const notes = await Note.findAll({
     where: { ticket_id: req.params.ticketId },
+    include: [
+      {
+        model: User,
+        attributes: ['name', 'is_admin'],
+        as: 'user', // Optional alias
+      },
+    ],
     logging: console.log,
   }); // Changed to ticketId  console.log("notes get notes ", notes);
   console.log("sending notes");
