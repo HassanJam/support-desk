@@ -15,12 +15,12 @@ function NoteItem({ note }) {
     <div
       className="note"
       style={{
-        backgroundColor: note.isStaff ? "rgba(0,0,0,0.7)" : "#fff",
-        color: note.isStaff ? "#fff" : "#000",
+        backgroundColor: note?.user?.is_admin ? "rgba(0,0,0,0.7)" : "#fff",
+        color: note?.user?.is_admin ? "#fff" : "#000",
       }}
     >
       <h4>
-        Note from {note?.user?.is_admin ? <span>Staff</span> : <span>{user.name}</span>}
+        Note from {note?.user?.is_admin ? <span>Staff</span> : <span>{note?.user?.name}</span>}
       </h4>
       <p>{note.text}</p>
       <div className="note-date">
