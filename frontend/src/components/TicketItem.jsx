@@ -11,7 +11,7 @@ function TicketItem({ ticket, is_admin }) {
   return (
     <div className='ticket'>
       {!is_admin && (
-          <div>{ticket.user.name}</div>
+          <div>{ticket?.user?.name}</div>
         )}
       <div>{new Date(ticket.created_at).toLocaleString('en-US', options)}</div>
       <div>{ticket.product}</div>

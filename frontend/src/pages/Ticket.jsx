@@ -39,7 +39,7 @@ function Ticket() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [noteText, setNoteText] = useState("");
 
-  const { ticket, isLoading, isError, message } = useSelector(
+  const { ticket, isLoading: isTicketLoading, isError, message } = useSelector(
     (state) => state.tickets
   );
 
@@ -66,7 +66,7 @@ function Ticket() {
 
   console.log("successfully got Notes", notes);
 
-  if (isLoading || notesIsLoading) return <Spinner />;
+  if (isTicketLoading || notesIsLoading) return <Spinner />;
 
   if (isError) {
     return <h3>Something went wrong</h3>;
@@ -104,14 +104,13 @@ function Ticket() {
             {ticket.status}
           </span>
         </h2>
-        {
-          user.is_admin && (
+        {user.is_admin && (
             <>
               <h2>
-                Created By: {ticket.user.name}
+                Created By: {ticket?.user?.name}
               </h2>
               <h2>
-                Email: {ticket.user.email}
+                Email: {ticket?.user?.email}
               </h2>    
             </>)
         }        
@@ -164,7 +163,7 @@ function Ticket() {
       </Modal>
 
       {notes.map((note) => (
-        <NoteItem key={note._id} note={note} />
+        <NoteItem key={note.id} note={note} />
       ))}
 
       {ticket.status !== "close" && (
