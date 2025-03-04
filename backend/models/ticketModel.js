@@ -8,6 +8,11 @@ const Ticket = sequelize.define('Ticket', {
     autoIncrement: true,
     primaryKey: true,
   },
+  is_archived: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
   user_id: {
     type: DataTypes.INTEGER,
     allowNull: false,

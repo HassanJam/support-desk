@@ -203,6 +203,5 @@ module.exports = {
   getTickets,
   createTicket,
   getTicket,
-  deleteTicket,
   updateTicket,
 };

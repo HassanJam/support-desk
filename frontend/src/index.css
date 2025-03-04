@@ -181,6 +181,11 @@ h3 {
   margin-bottom: 20px;
 }
 
+.btn-archive {
+  width: 200px;
+  margin-bottom: 20px;
+}
+
 .btn:hover {
   transform: scale(0.98);
 }
@@ -255,6 +260,14 @@ h3 {
   border-radius: 10px;
 }
 
+.status-archived {
+  background-color: rgb(255, 255, 25);
+  color: #000;
+  border-radius: 10px;
+  font: bold;
+}
+
+
 .ticket-page {
   position: relative;
   text-align: left;
@@ -286,6 +299,12 @@ h3 {
   border: 1px #ccc solid;
   padding: 10px 15px;
   border-radius: 5px;
+}
+
+.ticket .actions {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
 }
 
 .note {
