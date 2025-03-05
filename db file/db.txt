@@ -13,6 +13,7 @@ CREATE TABLE users (
 
 CREATE TABLE tickets (
   id INT AUTO_INCREMENT PRIMARY KEY,
+  is_archived BOOLEAN NOT NULL DEFAULT FALSE,
   user_id INT NOT NULL,
   product ENUM('iPhone', 'iPad', 'MacBook', 'Macbook Pro', 'iMac', 'iPod', 'iPod touch') NOT NULL,
   description TEXT NOT NULL,
