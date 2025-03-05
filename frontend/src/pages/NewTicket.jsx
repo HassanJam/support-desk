@@ -15,7 +15,7 @@ function NewTicket() {
   const { name, email } = user;
   // const [name] = useState(user.name);
   // const [email] = useState(user.email);
-  const [product, setProduct] = useState("iPhone");
+  const [issue, setIssue] = useState("Client Regarding");
   const [description, setDescription] = useState("");
 
   const dispatch = useDispatch();
@@ -34,7 +34,7 @@ function NewTicket() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(createTicket({ product, description }));
+    dispatch(createTicket({ issue, description }));
   };
 
   if (isLoading) return <Spinner />;
@@ -61,17 +61,23 @@ function NewTicket() {
         </div>
         <form onSubmit={onSubmit}>
           <div className="form-group">
-            <label htmlFor="product">Product</label>
+            <label htmlFor="issue">Issue</label>
             <select
-              name="product"
-              id="product"
-              value={product}
-              onChange={(e) => setProduct(e.target.value)}
+              name="issue"
+              id="issue"
+              value={issue}
+              onChange={(e) => setIssue(e.target.value)}
             >
-              <option value="iPhone">iPhone</option>
-              <option value="Macbook Pro">Macbook Pro</option>
-              <option value="iMac">iMac</option>
-              <option value="iPad">iPad</option>
+              <option value="Client Regarding">Client Regarding</option>
+              <option value="Client Biometric">Client Biometric</option>
+              <option value="External Extension">External Extension</option>
+              <option value="Network">Network</option>
+              <option value="Internet">Internet</option>
+              <option value="Phone">Phone</option>
+              <option value="Software Training">Software Training</option>
+              <option value="Mobile Application">Mobile Application</option>
+              <option value="Video Call">Video Call</option>
+              <option value="Audio Minutes">Audio Minutes</option>
             </select>
           </div>
           <div className="form-group">

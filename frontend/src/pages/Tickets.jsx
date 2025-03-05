@@ -39,7 +39,7 @@ function Tickets() {
               <div>Name</div>
             )}
           <div>Date</div>
-          <div>Product</div>
+          <div>Issue</div>
           <div>Status</div>
           <div></div>
         </div>

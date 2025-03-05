@@ -14,7 +14,7 @@ CREATE TABLE users (
 CREATE TABLE tickets (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
-  product ENUM('iPhone', 'iPad', 'MacBook', 'Macbook Pro', 'iMac', 'iPod', 'iPod touch') NOT NULL,
+  issue ENUM('Client Regarding', 'Client Biometric', 'External Extension', 'Network', 'Internet', 'Phone', 'Software Training', 'Mobile Application', 'Video Call', 'Audio Minutes') NOT NULL,
   description TEXT NOT NULL,
   status ENUM('new', 'open', 'close') NOT NULL DEFAULT 'new',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
