@@ -118,13 +118,13 @@ const getTicket = asyncHandler(async (req, res) => {
 });
 
 const createTicket = asyncHandler(async (req, res) => {
-  const { product, description } = req.body;
+  const { issue, description } = req.body;
   console.log("createTicket - Request body:", req.body);
 
-  if (!product || !description) {
-    console.log("createTicket - Missing product or description");
+  if (!issue || !description) {
+    console.log("createTicket - Missing issue or description");
     res.status(400);
-    throw new Error("Please provide a product and description");
+    throw new Error("Please provide a issue and description");
   }
 
   console.log(
@@ -145,7 +145,7 @@ const createTicket = asyncHandler(async (req, res) => {
 
   console.log("createTicket - Attempting to create ticket");
   const ticket = await Ticket.create({
-    product,
+    issue,
     description,
     user_id: req.user.id, // Ensure this matches your model (userId, not user_id)
     status: "new",

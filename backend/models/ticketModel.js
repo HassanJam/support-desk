@@ -13,10 +13,10 @@ const Ticket = sequelize.define('Ticket', {
     allowNull: false,
     references: { model: 'users', key: 'id' },
   },
-  product: {
-    type: DataTypes.ENUM('iPhone', 'iPad', 'MacBook', 'Macbook Pro', 'iMac', 'iPod', 'iPod touch'),
+  issue: {
+    type: DataTypes.ENUM('Client Regarding', 'Client Biometric', 'External Extension', 'Network', 'Internet', 'Phone', 'Software Training', 'Mobile Application', 'Video Call', 'Audio Minutes'),
     allowNull: false,
-    validate: { notEmpty: { msg: 'Please select a product' } },
+    validate: { notEmpty: { msg: 'Please select a issue' } },
   },
   description: {
     type: DataTypes.TEXT,
